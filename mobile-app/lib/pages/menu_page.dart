@@ -36,14 +36,29 @@ class MenuPage extends HookConsumerWidget {
                       title: Row(children: [
                         Text(drink.title),
                         const Spacer(),
-                        incrementButton(drink.drinkId, orderCountorController,
-                            orderCountor),
+                        incrementButton(
+                            drink.id, orderCountorController, orderCountor),
                       ]),
                       subtitle: Text("${drink.price.toString()}円 "),
                     );
                   }).toList(),
                 ),
-                Icon(Icons.directions_transit),
+                ListView(
+                  restorationId: 'list_demo_list_view',
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  children: FoodMenu.values.map((food) {
+                    return ListTile(
+                      leading: const Icon(Icons.free_breakfast),
+                      title: Row(children: [
+                        Text(food.title),
+                        const Spacer(),
+                        incrementButton(
+                            food.id, orderCountorController, orderCountor),
+                      ]),
+                      subtitle: Text("${food.price.toString()}円 "),
+                    );
+                  }).toList(),
+                ),
               ],
             ),
             bottomNavigationBar: BottomAppBar(
@@ -114,9 +129,22 @@ enum DrinkMenu {
   water8(11, "おいしい水", "天然水", 0),
   water9(12, "おいしい水", "天然水", 0);
 
-  const DrinkMenu(this.drinkId, this.title, this.subTitle, this.price);
+  const DrinkMenu(this.id, this.title, this.subTitle, this.price);
 
-  final int drinkId;
+  final int id;
+  final String title;
+  final String subTitle;
+  final int price;
+}
+
+enum FoodMenu {
+  curry(1001, "うまいカレー", "うまくてオススメ", 380),
+  rice(1002, "おいしいご飯", "おいしい", 280),
+  noodle(1003, "おいしい麺", "自家製麺使用", 180);
+
+  const FoodMenu(this.id, this.title, this.subTitle, this.price);
+
+  final int id;
   final String title;
   final String subTitle;
   final int price;
