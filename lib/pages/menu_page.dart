@@ -1,70 +1,98 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 
-import '../hooks/use_drink_menu.dart';
 import '../providers/order_provider.dart';
 
 class MenuPage extends HookConsumerWidget {
   const MenuPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef watch) {
-    final drinkMenu = useDrinkMenu();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final orderCountorController =
+        ref.read(orderCounterNotifierProvider.notifier);
+    final orderCountor = ref.watch(orderCounterNotifierProvider);
     return Material(
       child: DefaultTabController(
         length: 2,
         child: Scaffold(
-          appBar: AppBar(
-            bottom: const TabBar(
-              tabs: [
-                Tab(icon: Icon(Icons.free_breakfast)),
-                Tab(icon: Icon(Icons.cake)),
+            appBar: AppBar(
+              bottom: const TabBar(
+                tabs: [
+                  Tab(icon: Icon(Icons.free_breakfast)),
+                  Tab(icon: Icon(Icons.cake)),
+                ],
+              ),
+              title: const Text('Tabs Demo'),
+            ),
+            body: TabBarView(
+              children: [
+                // Icon(Icons.directions_transit),
+                ListView(
+                  restorationId: 'list_demo_list_view',
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  children: DrinkMenu.values.map((drink) {
+                    return ListTile(
+                      leading: const Icon(Icons.free_breakfast),
+                      title: Row(children: [
+                        Text(drink.title),
+                        const Spacer(),
+                        incrementButton(drink.drinkId, orderCountorController,
+                            orderCountor),
+                      ]),
+                      subtitle: Text("${drink.price.toString()}円 "),
+                    );
+                  }).toList(),
+                ),
+                Icon(Icons.directions_transit),
               ],
             ),
-            title: const Text('Tabs Demo'),
-          ),
-          body: TabBarView(
-            children: [
-              // Icon(Icons.directions_transit),
-              ListView(
-                restorationId: 'list_demo_list_view',
+            bottomNavigationBar: BottomAppBar(
+              child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
-                children: DrinkMenu.values.map((drink) {
-                  return ListTile(
-                    leading: const Icon(Icons.free_breakfast),
-                    title: Row(children: [
-                      Text(drink.title),
-                      Spacer(),
-                      incrementButton(drink.drinkId, drinkMenu),
-                    ]),
-                    subtitle: Text("${drink.price.toString()}円 "),
-                  );
-                }).toList(),
+                child: Row(
+                  children: [
+                    const Spacer(),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('戻る'),
+                    ),
+                    const Spacer(),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('注文'),
+                    ),
+                    const Spacer(),
+                  ],
+                ),
               ),
-              Icon(Icons.directions_transit),
-            ],
-          ),
-        ),
+            )),
       ),
     );
   }
 }
 
-Widget incrementButton(int drinkId, DrinkOrderList drinkMenu) {
+Widget incrementButton(
+  int drinkId,
+  OrderCounterNotifier orderCountorController,
+  Map<int, int> orderCountor,
+) {
   return Row(
     children: [
       IconButton(
         icon: const Icon(Icons.add),
         onPressed: () {
-          drinkMenu.addOrder(drinkId);
+          orderCountorController.increment(drinkId);
         },
       ),
-      Text(drinkMenu.drinkMenu.toString()),
+      Text((orderCountor[drinkId] ?? 0).toString()),
       IconButton(
         icon: const Icon(Icons.remove),
         onPressed: () {
-          drinkMenu.removeOrder(drinkId);
+          orderCountorController.decrement(drinkId);
         },
       ),
     ],
@@ -76,7 +104,15 @@ enum DrinkMenu {
   coffee(1, "うまいコーヒー", "うまくてオススメ", 380),
   tea(2, "おいしいお茶", "おいしい", 280),
   juice(3, "おいしいジュース", "オレンジ100%", 180),
-  water(4, "おいしい水", "天然水", 0);
+  water(4, "おいしい水", "天然水", 0),
+  water2(5, "おいしい水", "天然水", 0),
+  water3(6, "おいしい水", "天然水", 0),
+  water4(7, "おいしい水", "天然水", 0),
+  water5(8, "おいしい水", "天然水", 0),
+  water6(9, "おいしい水", "天然水", 0),
+  water7(10, "おいしい水", "天然水", 0),
+  water8(11, "おいしい水", "天然水", 0),
+  water9(12, "おいしい水", "天然水", 0);
 
   const DrinkMenu(this.drinkId, this.title, this.subTitle, this.price);
 
