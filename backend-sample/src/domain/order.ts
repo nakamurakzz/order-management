@@ -29,7 +29,7 @@ export class OrderEntity {
   }
 
   static create(params: Omit<OrderParams, "id" | "orderStatusTypeId">, itemIds: number[]) {
-    if (Object.keys(params.order).filter((key) => !itemIds.includes(Number(key))).length > 0) {
+    if (params.order.map(o => Object.keys(o)).filter((key) => !itemIds.includes(Number(key))).length > 0) {
       throw new Error("order must be itemIds");
     };
     return new OrderEntity({

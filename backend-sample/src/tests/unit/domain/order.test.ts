@@ -27,4 +27,11 @@ describe("Order", () => {
       }, [1, 2, 3]);
     }).toThrow("order must be itemIds");
   });
+
+  test("should create an order", () => {
+    const order = OrderEntity.create({
+      order: [{ 1: 1 }, { 2: 1 }],
+    }, [1, 2, 3]);
+    expect(order.id).toBeUndefined();
+  });
 });

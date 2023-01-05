@@ -1,4 +1,4 @@
-import { itemFactory } from "../../../domain/item";
+import { ItemEntity, itemFactory } from "../../../domain/item";
 
 describe("Item", () => {
   test("should be able to create an item", () => {
@@ -22,5 +22,15 @@ describe("Item", () => {
         itemTypeId: 4,
       });
     }).toThrow("itemTypeId must be 1, 2 or 3");
+  });
+
+  test("should create an item", () => {
+    const item = ItemEntity.create({
+      title: "title",
+      subTitle: "subTitle",
+      price: 100,
+      itemTypeId: 1,
+    });
+    expect(item.id).toBeUndefined();
   });
 });

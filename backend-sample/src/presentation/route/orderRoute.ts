@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import { OrderUsecase } from "../../usecase/orderUsecase";
 import { OrderCreateParams } from '../type/order';
+import { logger } from '../../logger';
 
 const router = express.Router();
 
@@ -11,7 +12,7 @@ router.get('/', async (_req: Request, res: Response) => {
     const orders = await orderUsecase.findOrders();
     return res.status(200).send(orders);
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     return res.status(500).send;
   }
 });
@@ -20,9 +21,9 @@ router.post('/', async (req: Request, res: Response) => {
   try {
     const body = req.body as OrderCreateParams;
     const orders = await orderUsecase.create(body);
-    return res.status(200).send(orders);
+    return res.status(200).send({ orderId: orders.id });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     return res.status(500).send;
   }
 });

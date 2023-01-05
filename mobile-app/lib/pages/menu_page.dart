@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:order_management/providers/api_provider.dart';
-
+import '../apis/api_client.dart';
 import '../providers/order_provider.dart';
 
 class MenuPage extends HookConsumerWidget {
@@ -23,7 +23,7 @@ class MenuPage extends HookConsumerWidget {
                   Tab(icon: Icon(Icons.cake)),
                 ],
               ),
-              title: const Text('Tabs Demo'),
+              title: const Text('Drink & Cake Menu'),
             ),
             body: ref.watch(itemsProvider).when(
                 loading: () => const Center(child: Text('Loading...')),
@@ -39,7 +39,7 @@ class MenuPage extends HookConsumerWidget {
                             .where((item) => item.itemTypeId == 1)
                             .map((drink) {
                           return ListTile(
-                            leading: const Icon(Icons.free_breakfast),
+                            leading: const Icon(Icons.free_breakfast_rounded),
                             title: Row(children: [
                               Text(drink.title),
                               const Spacer(),
@@ -57,7 +57,7 @@ class MenuPage extends HookConsumerWidget {
                             .where((item) => item.itemTypeId == 2)
                             .map((food) {
                           return ListTile(
-                            leading: const Icon(Icons.free_breakfast),
+                            leading: const Icon(Icons.cake_rounded),
                             title: Row(children: [
                               Text(food.title),
                               const Spacer(),
@@ -79,14 +79,43 @@ class MenuPage extends HookConsumerWidget {
                     const Spacer(),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.pop(context);
+                        orderCountorController.clear();
                       },
-                      child: const Text('戻る'),
+                      child: const Text('リセット'),
                     ),
                     const Spacer(),
                     ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
+                      onPressed: () async {
+                        if (orderCountor.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('メニューから選択してください。'),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                          return;
+                        }
+                        final result =
+                            await apiClient.postOrder(order: orderCountor);
+                        if (result) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('注文しました。'),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                          await Future.delayed(const Duration(seconds: 2));
+                          orderCountorController.clear();
+                          Navigator.pop(context);
+                          return;
+                        }
+                        // エラー処理
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('注文に失敗しました。店員をお呼びください。'),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
                       },
                       child: const Text('注文'),
                     ),

@@ -18,6 +18,10 @@ class OrderCounterNotifier extends StateNotifier<Map<int, int>> {
       state = {...state, id: state[id]! - 1};
     }
   }
+
+  void clear() {
+    state = {};
+  }
 }
 
 final orderCounterNotifierProvider =
