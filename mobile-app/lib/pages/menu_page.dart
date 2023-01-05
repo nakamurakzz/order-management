@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:order_management/providers/api_provider.dart';
 
 import '../providers/order_provider.dart';
 
@@ -24,43 +25,52 @@ class MenuPage extends HookConsumerWidget {
               ),
               title: const Text('Tabs Demo'),
             ),
-            body: TabBarView(
-              children: [
-                // Icon(Icons.directions_transit),
-                ListView(
-                  restorationId: 'list_demo_list_view',
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  children: DrinkMenu.values.map((drink) {
-                    return ListTile(
-                      leading: const Icon(Icons.free_breakfast),
-                      title: Row(children: [
-                        Text(drink.title),
-                        const Spacer(),
-                        incrementButton(
-                            drink.id, orderCountorController, orderCountor),
-                      ]),
-                      subtitle: Text("${drink.price.toString()}円 "),
-                    );
-                  }).toList(),
-                ),
-                ListView(
-                  restorationId: 'list_demo_list_view',
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  children: FoodMenu.values.map((food) {
-                    return ListTile(
-                      leading: const Icon(Icons.free_breakfast),
-                      title: Row(children: [
-                        Text(food.title),
-                        const Spacer(),
-                        incrementButton(
-                            food.id, orderCountorController, orderCountor),
-                      ]),
-                      subtitle: Text("${food.price.toString()}円 "),
-                    );
-                  }).toList(),
-                ),
-              ],
-            ),
+            body: ref.watch(itemsProvider).when(
+                loading: () => const Center(child: Text('Loading...')),
+                error: (error, stack) => Text(error.toString()),
+                data: (items) {
+                  return TabBarView(
+                    children: [
+                      // Icon(Icons.directions_transit),
+                      ListView(
+                        restorationId: 'list_demo_list_view',
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        children: items
+                            .where((item) => item.itemTypeId == 1)
+                            .map((drink) {
+                          return ListTile(
+                            leading: const Icon(Icons.free_breakfast),
+                            title: Row(children: [
+                              Text(drink.title),
+                              const Spacer(),
+                              incrementButton(drink.id, orderCountorController,
+                                  orderCountor),
+                            ]),
+                            subtitle: Text("${drink.price.toString()}円 "),
+                          );
+                        }).toList(),
+                      ),
+                      ListView(
+                        restorationId: 'list_demo_list_view',
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        children: items
+                            .where((item) => item.itemTypeId == 2)
+                            .map((food) {
+                          return ListTile(
+                            leading: const Icon(Icons.free_breakfast),
+                            title: Row(children: [
+                              Text(food.title),
+                              const Spacer(),
+                              incrementButton(food.id, orderCountorController,
+                                  orderCountor),
+                            ]),
+                            subtitle: Text("${food.price.toString()}円 "),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  );
+                }),
             bottomNavigationBar: BottomAppBar(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
