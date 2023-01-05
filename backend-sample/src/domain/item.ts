@@ -1,7 +1,7 @@
-type ItemParams = { id: number, title: string, subTitle: string, price: number, itemTypeId: number; };
+type ItemParams = { id?: number, title: string, subTitle: string, price: number, itemTypeId: number; };
 
-class ItemEntity {
-  id: number;
+export class ItemEntity {
+  id?: number;
   title: string;
   subTitle: string;
   price: number;
@@ -23,6 +23,13 @@ class ItemEntity {
     if (params.itemTypeId < 1 || params.itemTypeId > 3) {
       throw new Error("itemTypeId must be 1, 2 or 3");
     }
+  }
+
+  static create(params: Omit<ItemParams, "id">) {
+    return new ItemEntity({
+      id: undefined,
+      ...params,
+    });
   }
 }
 

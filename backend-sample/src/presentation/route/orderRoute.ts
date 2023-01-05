@@ -1,15 +1,15 @@
 import express, { Request, Response } from 'express';
-import { ItemUsecase } from "../../usecase/itemUsecase";
-import { ItemCreateParams } from '../type/item';
+import { OrderUsecase } from "../../usecase/orderUsecase";
+import { OrderCreateParams } from '../type/order';
 
 const router = express.Router();
 
-const itemUsecase = new ItemUsecase();
+const orderUsecase = new OrderUsecase();
 
 router.get('/', async (_req: Request, res: Response) => {
   try {
-    const items = await itemUsecase.findItems();
-    return res.status(200).send(items);
+    const orders = await orderUsecase.findOrders();
+    return res.status(200).send(orders);
   } catch (err) {
     console.error(err);
     return res.status(500).send;
@@ -18,9 +18,9 @@ router.get('/', async (_req: Request, res: Response) => {
 
 router.post('/', async (req: Request, res: Response) => {
   try {
-    const body = req.body as ItemCreateParams;
-    const items = await itemUsecase.create(body);
-    return res.status(200).send(items);
+    const body = req.body as OrderCreateParams;
+    const orders = await orderUsecase.create(body);
+    return res.status(200).send(orders);
   } catch (err) {
     console.error(err);
     return res.status(500).send;
