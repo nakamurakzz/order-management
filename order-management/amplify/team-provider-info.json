@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-ordermanagement-dev-191102-authRole",
+      "UnauthRoleArn": "arn:aws:iam::537542138877:role/amplify-ordermanagement-dev-191102-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::537542138877:role/amplify-ordermanagement-dev-191102-authRole",
+      "Region": "ap-northeast-1",
+      "DeploymentBucketName": "amplify-ordermanagement-dev-191102-deployment",
+      "UnauthRoleName": "amplify-ordermanagement-dev-191102-unauthRole",
+      "StackName": "amplify-ordermanagement-dev-191102",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:537542138877:stack/amplify-ordermanagement-dev-191102/c0a4df80-93f3-11ed-8c2d-0e67ecb59ddf",
+      "AmplifyAppId": "d4p0yr8yr5e0x"
+    },
+    "categories": {
+      "auth": {
+        "ordermanagement": {}
+      }
+    }
+  }
+}
