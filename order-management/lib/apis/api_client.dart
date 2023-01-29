@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:order_management/models/item.dart';
 
 class ApiClient {
   late final Dio dio;
@@ -50,29 +51,3 @@ class ApiClient {
 }
 
 final ApiClient apiClient = ApiClient();
-
-// APIレスポンスのモデル
-// Itemはid, title, subtitle, priceプロパティを持つ
-class Item {
-  final int id;
-  final String title;
-  final String subtitle;
-  final int price;
-  final int itemTypeId;
-  Item({
-    required this.id,
-    required this.title,
-    required this.subtitle,
-    required this.price,
-    required this.itemTypeId,
-  });
-  factory Item.fromJson(Map<String, dynamic> json) {
-    return Item(
-      id: json['id'],
-      title: json['title'],
-      subtitle: json['subTitle'],
-      price: json['price'],
-      itemTypeId: json['itemTypeId'],
-    );
-  }
-}

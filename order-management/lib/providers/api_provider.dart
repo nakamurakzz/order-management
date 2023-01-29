@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../apis/api_client.dart';
+import '../models/item.dart';
 
 final apiClientProvider = Provider((_) => apiClient);
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:order_management/models/item.dart';
 import 'package:order_management/providers/api_provider.dart';
 import '../apis/api_client.dart';
 import '../providers/order_provider.dart';
@@ -36,17 +37,19 @@ class MenuPage extends HookConsumerWidget {
                         restorationId: 'list_demo_list_view',
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         children: items
-                            .where((item) => item.itemTypeId == 1)
+                            .where((item) =>
+                                item.itemTypeId.value ==
+                                ItemTypeIdEnum.drink.value)
                             .map((drink) {
                           return ListTile(
                             leading: const Icon(Icons.free_breakfast_rounded),
                             title: Row(children: [
-                              Text(drink.title),
+                              Text(drink.title.value),
                               const Spacer(),
                               incrementButton(drink.id, orderCountorController,
                                   orderCountor),
                             ]),
-                            subtitle: Text("${drink.price.toString()}円 "),
+                            subtitle: Text("${drink.price.value.toString()}円 "),
                           );
                         }).toList(),
                       ),
@@ -54,17 +57,19 @@ class MenuPage extends HookConsumerWidget {
                         restorationId: 'list_demo_list_view',
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         children: items
-                            .where((item) => item.itemTypeId == 2)
+                            .where((item) =>
+                                item.itemTypeId.value ==
+                                ItemTypeIdEnum.cake.value)
                             .map((food) {
                           return ListTile(
                             leading: const Icon(Icons.cake_rounded),
                             title: Row(children: [
-                              Text(food.title),
+                              Text(food.title.value),
                               const Spacer(),
                               incrementButton(food.id, orderCountorController,
                                   orderCountor),
                             ]),
-                            subtitle: Text("${food.price.toString()}円 "),
+                            subtitle: Text("${food.price.value.toString()}円 "),
                           );
                         }).toList(),
                       ),
@@ -151,40 +156,4 @@ Widget incrementButton(
       ),
     ],
   );
-}
-
-// TODO: APIから取得するデータとしたい
-enum DrinkMenu {
-  coffee(1, "うまいコーヒー", "うまくてオススメ", 380),
-  tea(2, "おいしいお茶", "おいしい", 280),
-  juice(3, "おいしいジュース", "オレンジ100%", 180),
-  water(4, "おいしい水", "天然水", 0),
-  water2(5, "おいしい水", "天然水", 0),
-  water3(6, "おいしい水", "天然水", 0),
-  water4(7, "おいしい水", "天然水", 0),
-  water5(8, "おいしい水", "天然水", 0),
-  water6(9, "おいしい水", "天然水", 0),
-  water7(10, "おいしい水", "天然水", 0),
-  water8(11, "おいしい水", "天然水", 0),
-  water9(12, "おいしい水", "天然水", 0);
-
-  const DrinkMenu(this.id, this.title, this.subTitle, this.price);
-
-  final int id;
-  final String title;
-  final String subTitle;
-  final int price;
-}
-
-enum FoodMenu {
-  curry(1001, "うまいカレー", "うまくてオススメ", 380),
-  rice(1002, "おいしいご飯", "おいしい", 280),
-  noodle(1003, "おいしい麺", "自家製麺使用", 180);
-
-  const FoodMenu(this.id, this.title, this.subTitle, this.price);
-
-  final int id;
-  final String title;
-  final String subTitle;
-  final int price;
 }
